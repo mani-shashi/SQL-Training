@@ -11,3 +11,81 @@ GO
 MyPractice "Chennai"
 
 SELECT * from Customers
+
+GO
+-- ALTER PROCEDURE [dbo].[Sp_GetCustomerByNameAndCity]
+--     @Name VARCHAR(100),
+--     @City VARCHAR(50)
+-- AS
+-- BEGIN
+--     SELECT * from Customers WHERE FullName = @Name AND City = @City
+-- END
+GO
+Exec Sp_GetCustomerByNameAndCity 'Gopi Suresh', 'Coimbatore'
+
+
+/*         Adventure DB Setup for mac, using (docker)
+
+
+docker run -e 'ACCEPT_EULA=Y' \
+-e 'SA_PASSWORD=Password@123#' \
+-p 1433:1433 \
+--name sqlserver \
+-d mcr.microsoft.com/mssql/server:2022-latest
+
+docker cp AdventureWorks2019.bak sqlserver:/var/opt/mssql/data/AdventureWorks2019.bak
+
+sqlcmd -S localhost,1433 -U SA -P 'Password@123#' \
+-Q "RESTORE FILELISTONLY FROM DISK = '/var/opt/mssql/data/AdventureWorks2019.bak'"
+
+sqlcmd -S localhost,1433 -U SA -P 'Password@123#' \
+-Q "RESTORE DATABASE AdventureWorksDB FROM DISK = '/var/opt/mssql/data/AdventureWorks2019.bak' WITH MOVE 'AdventureWorks2019' TO '/var/opt/mssql/data/AdventureWorks2019.mdf', MOVE 'AdventureWorks2019_log' TO '/var/opt/mssql/data/AdventureWorks2019_log.ldf'"
+*/
+
+
+-- SET ANSI_NULLS ON
+-- GO
+-- SET QUOTED_IDENTIFIER ON
+-- GO
+-- CREATE TABLE [dbo].[tbl_Department](
+-- 	[ID] [int] NULL,
+-- 	[Name] [varchar](50) NULL
+-- ) ON [PRIMARY]
+-- GO
+-- INSERT [dbo].[tbl_Department] ([ID], [Name]) VALUES (6, N'Dept6')
+-- INSERT [dbo].[tbl_Department] ([ID], [Name]) VALUES (2, N'Dept2')
+-- INSERT [dbo].[tbl_Department] ([ID], [Name]) VALUES (3, N'Dept3')
+-- INSERT [dbo].[tbl_Department] ([ID], [Name]) VALUES (4, N'Dept4')
+-- INSERT [dbo].[tbl_Department] ([ID], [Name]) VALUES (55, N'Heavy Department')
+-- INSERT [dbo].[tbl_Department] ([ID], [Name]) VALUES (7, N'Dept7')
+-- GO
+
+
+GO
+CREATE PROCEDURE [dbo].[Sp_CrudOperations]
+AS
+BEGIN
+    -- READ
+    SELECT *
+    FROM tbl_Department;
+
+    -- INSERT
+    INSERT INTO tbl_Department (ID, Name)
+    VALUES 
+        (6, 'Dept6'),
+        (7, 'Dept7');
+
+    -- UPDATE
+    UPDATE tbl_Department
+    SET 
+        ID = 55,
+        Name = 'Heavy Department'
+    WHERE ID = 5;
+
+    -- DELETE
+    DELETE FROM tbl_Department
+    WHERE ID = 1;
+END;
+GO
+
+EXEC Sp_CrudOperations;
