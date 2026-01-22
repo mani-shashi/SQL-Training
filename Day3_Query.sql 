@@ -1,0 +1,13 @@
+
+-- CREATE PROCEDURE MyPractice
+-- @City VARCHAR(50)
+-- as 
+-- BEGIN
+
+-- SELECT * from Customers WHERE City=@City
+-- END
+
+GO
+MyPractice "Chennai"
+
+SELECT * from Customers
